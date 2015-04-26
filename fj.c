@@ -63,6 +63,7 @@ int fj_editor(char** argv)
     char* editor_string = "vi ";
     if( (command = malloc(strlen(editor_string) + strlen(argv[1]) + 1)) != NULL)
     {
+	command[0] = '\0';
         strcat(command, editor_string);
         strcat(command, argv[1]);
         system(command);
