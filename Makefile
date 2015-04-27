@@ -3,7 +3,7 @@ CFLAGS=-Wall -Wextra -Wpedantic
 
 all: fj 
 
-fj: fj.c 
+fj: fj.c core.c 
 	$(CC) $^ -o fj 
 
 clean:
