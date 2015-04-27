@@ -6,9 +6,9 @@
 
 int main(int argc, char** argv)
 {
-    int oc; //option character
-    char* b_opt_arg;
-	
+    int oc; // Option character
+    char* b_opt_arg; // Option argument
+
     if(argc == 1)
     {
 	system("ls --color=auto");
@@ -16,7 +16,8 @@ int main(int argc, char** argv)
     }
     else if(argc == 2)
     {
-	fj_editor(argv);
+	//TODO: If dir, cd into.  Otherwise vi file.
+	fj_editor(argv); // Currently defaults to vi editor
 	return 0;
     }
 
