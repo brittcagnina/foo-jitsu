@@ -4,8 +4,8 @@
 
 #include "core.h"
 
-#define LFLAG 0b00000001
-#define AFLAG 0b00000010
+#define LFLAG 0x01
+#define AFLAG 0x02
 
 int main(int argc, char** argv)
 {
@@ -33,7 +33,6 @@ int main(int argc, char** argv)
 		flags |= AFLAG;
 	        break;
 	    case 'r' :
-		printf("fj removed %s\n", optarg);
 		fj_remove(optarg);
 		break;
 	    case ':' :

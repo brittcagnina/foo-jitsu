@@ -13,7 +13,7 @@ int fj_editor(char** argv)
     char* editor_string = "vi ";
     if( (command = malloc(strlen(editor_string) + strlen(argv[1]) + 1)) != NULL)
     {
-        command[0] = '\0';
+        command[0] = '\0'; // to be safe
         strcat(command, editor_string);
         strcat(command, argv[1]);
         system(command);
@@ -28,37 +28,36 @@ int fj_editor(char** argv)
 
 int fj_remove(char* optarg)
 {
-    char* b_opt_arg;
-    b_opt_arg = optarg;
-
     struct stat s;
-    int err = stat(b_opt_arg, &s);
+    int err = stat(optarg, &s);
     if(-1 == err)
     {
-        printf("this dir D.N.E.\n");
+        printf("The object, %s,  D.N.E.\n", optarg);
     }
     else
     {
-        char* rm_string = "rm -r";
+        char* rm_string = "rm -r ";
         char* command;
-        if( (command = malloc(strlen(rm_string) + strlen(b_opt_arg) + 1)) != NULL )
+        if( (command = malloc(strlen(rm_string) + strlen(optarg) + 1)) != NULL )
         {
-            command[0] = '\0'; //insurance
-            strcat(command, "rm -r ");
-            strcat(command, b_opt_arg);
+            command[0] = '\0'; // to be safe
+            strcat(command, rm_string);
+            strcat(command, optarg);
         }
         else
         {
             fprintf(stderr, "malloc failed!\n");
         }
 
-        if(S_ISDIR(s.st_mode))
+        if(S_ISDIR(s.st_mode) || S_ISREG(s.st_mode))
         {
+	    printf("foo-jitsu removed %s\n", optarg);
             system(command);
         }
-        else if(S_ISREG(s.st_mode))
+        else
         {
-            system(command);
+            printf("Cannot remove %s\n", optarg);
+	    return 1; 
         }
     }
 
