@@ -4,51 +4,64 @@
 
 #include "core.h"
 
+#define LFLAG 0b00000001
+#define AFLAG 0b00000010
+
 int main(int argc, char** argv)
 {
     int oc; // Option character
-    char* b_opt_arg; // Option argument
-
+    char flags = 0x00;
+    int hasOption;
+ 
     if(argc == 1)
     {
 	system("ls --color=auto");
 	return 0;
     }
-    else if(argc == 2)
+
+    while( (oc = getopt(argc, argv, ":blar:")) != -1)
+    {
+	if(hasOption == 0)
+	    hasOption = 1;
+
+        switch(oc)
+        {
+	    case 'l' :
+		flags |= LFLAG;
+		break;
+	    case 'a' :
+		flags |= AFLAG;
+	        break;
+	    case 'r' :
+		printf("fj removed %s\n", optarg);
+		fj_remove(optarg);
+		break;
+	    case ':' :
+		printf(": error\n");
+	        break; 
+	    case '?' :
+		printf("? error\n");
+		break;
+	    default :
+		printf("default error\n");
+        }
+    }
+
+    if(argc == 2 && !hasOption)
     {
 	//TODO: If dir, cd into.  Otherwise vi file.
 	fj_editor(argv); // Currently defaults to vi editor
 	return 0;
     }
 
-    while( (oc = getopt(argc, argv, "alr:b:")) != -1)
-    {
-        switch(oc)
-        {
-	    case 'a' :
-	        printf("option a has been recognized\n"); 
-	        break;
-	    case 'b' :
-	        // handle -b, getr arg value from optarg
-	        b_opt_arg = optarg;
-	        printf("option argument passed was: %s\n", b_opt_arg);
-		break;
-	    case 'l' :
-		system("ls -l --color=auto");
-		break;
-	    case 'r' :
-		printf(" -r recognized\n");
-		fj_remove(optarg);
-		break;
-	    case ':' :
-		printf(": error\n");
-	        //err handling
-	    case '?' :
-		printf("? error\n");
-	    default :
-		printf("default error\n");
-	        //err handling
-        }
+    if(flags == LFLAG) {
+	system("ls -l --color=auto");
+    }
+    if(flags == AFLAG) {
+	system("ls -a --color=auto");
+    }
+    if(flags == (AFLAG | LFLAG)) {
+	system("ls -la --color=auto");
     }
 
     return 0;
